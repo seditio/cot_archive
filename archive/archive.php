@@ -16,9 +16,9 @@ Hooks=standalone
 defined('COT_CODE') or die('Wrong URL');
 
 include_once cot_incfile('archive', 'plug', 'resources');
-
 include_once cot_incfile('page', 'module');
 include_once cot_incfile('cotlib', 'plug');
+include_once cot_incfile('hits', 'plug');
 
 $out['subtitle'] = $L['archive_metaTitle'];
 $out['desc'] = $L['archive_metaDesc'];
@@ -26,8 +26,9 @@ $out['desc'] = $L['archive_metaDesc'];
 $db_pages = Cot::$db->pages;
 
 $year = cot_import('year', 'G', 'INT');
-
 ((empty($year) && Cot::$cfg['plugin']['archive']['home_style'])) && cot_redirect(cot_url('archive', 'year=' . (int)date('Y')));
+
+cot_stat_inc('totalarchive', 1, true);
 
 $count_system = '';
 !Cot::$cfg['plugin']['archive']['count_system'] && $count_system = "AND page_cat != 'system'";
@@ -58,7 +59,8 @@ $t->assign([
   'ARCHIVE_DESC' => $L['archive_desc'],
   'ARCHIVE_BREADCRUMBS' => cot_breadcrumbs($crumbs, Cot::$cfg['homebreadcrumb']),
   'ARCHIVE_TOTALPOSTS' => $total_posts,
-  'ARCHIVE_START' => cot_date('j F', $starting),
+  'ARCHIVE_START' => cot_date('j F Y', $starting),
+  'ARCHIVE_COUNT' => cot_stat_get('totalarchive'),
 ]);
 
 // Compile Years Block

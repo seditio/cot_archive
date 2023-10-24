@@ -62,4 +62,6 @@ $L['archive_month12'] = 'декабрь';
 $Ls['archive_hits'] = 'просмотр,просмотра,просмотров';
 $Ls['archive_pages'] = 'страница,страницы,страниц';
 
+$L['archive_since'] = 'с';
+
 $L['archive_wrongYear'] = 'Неправильно указан год!';

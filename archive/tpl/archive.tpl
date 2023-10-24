@@ -7,7 +7,7 @@
 				<div class="title px-2 px-sm-0">
 					<h1 class="lh-1 mb-1">{ARCHIVE_TITLE}</h1>
 					<p class="lh-sm text-secondary">
-						{ARCHIVE_DESC}
+						{ARCHIVE_DESC} ({ARCHIVE_TOTALPOSTS|cot_declension($this, 'Pages')} {PHP.L.archive_since} {ARCHIVE_START} {PHP.L.archive_year})
 					</p>
 					<p class="mb-0">
 						{ARCHIVE_BREADCRUMBS}
@@ -22,7 +22,11 @@
 				<ul class="list-unstyled">
 					<!-- BEGIN: MONTH_ROW -->
 					<li class="py-3 px-4 {MONTH_ROW_ODDEVEN}">
-						<h2><span class="text-capitalize">{MONTH_ROW_MONTH} {MONTH_ROW_YEAR}</span> {PHP.L.archive_year} ({MONTH_ROW_COUNT_PAGES})</h2>
+						<h2 class="fs-3">
+							<span class="text-capitalize">{MONTH_ROW_MONTH} {MONTH_ROW_YEAR}</span>
+							{PHP.L.archive_year}
+							<sup class="fw-normal">({MONTH_ROW_COUNT_PAGES})</sup>
+						</h2>
 						<ul class="list-unstyled">
 							<!-- BEGIN: POST_ROW -->
 							<li>

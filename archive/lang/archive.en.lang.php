@@ -60,4 +60,6 @@ $L['archive_month12'] = 'December';
 $Ls['archive_hits'] = 'views,view';
 $Ls['archive_pages'] = 'pages,page';
 
+$L['archive_since'] = 'since';
+
 $L['archive_wrongYear'] = 'Wrong year!';

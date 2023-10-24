@@ -15,7 +15,7 @@ Lock_guests=W12345A
 Auth_members=R
 Lock_members=W12345A
 Requires_modules=
-Requires_plugins=cotlib
+Requires_plugins=hits,cotlib
 [END_COT_EXT]
 [BEGIN_COT_EXT_CONFIG]
 count_system=01:radio::0:Count system pages
