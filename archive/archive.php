@@ -25,11 +25,16 @@ $db_pages = Cot::$db->pages;
 
 $year = cot_import('year', 'G', 'INT');
 
+((empty($year) && Cot::$cfg['plugin']['archive']['home_style'])) && cot_redirect(cot_url('archive', 'year=' . (int)date('Y')));
+
 $count_system = '';
 !Cot::$cfg['plugin']['archive']['count_system'] && $count_system = "AND page_cat != 'system'";
 
 $filter_year = '';
 !empty($year) && $filter_year = "AND FROM_UNIXTIME(page_date, '%Y') = $year";
+
+$no_access = sedby_black_cats();
+!empty($no_access) && $no_access = "AND page_cat NOT IN (" . sedby_black_cats() . ")";
 
 if (empty($year)) {
   $title = $L['archive_title'];
@@ -51,7 +56,7 @@ $t->assign([
 
 // Compile Years Block
 
-$query = "SELECT DISTINCT(FROM_UNIXTIME(page_date, '%Y')) AS year FROM $db_pages WHERE page_state = 0 $count_system ORDER BY page_date DESC";
+$query = "SELECT DISTINCT(FROM_UNIXTIME(page_date, '%Y')) AS year FROM $db_pages WHERE page_state = 0 $count_system $no_access ORDER BY page_date DESC";
 
 $years_array = $db->query($query)->fetchAll(PDO::FETCH_COLUMN);
 if (!empty($year) && !in_array($year, $years_array)) {
@@ -73,11 +78,11 @@ while ($row = $res->fetch()) {
   $t->parse("MAIN.YEAR_ROW");
 }
 
-$t->assign('ARCHIVE_YEARS', $years);
+$t->assign('ARCHIVE_YEAR', $year);
 
 // Compile Months Block
 
-$res = "SELECT DISTINCT(FROM_UNIXTIME(page_date, '%Y-%m')) AS monthYear FROM $db_pages WHERE page_state = 0 $filter_year $count_system ORDER BY page_date DESC";
+$res = "SELECT DISTINCT(FROM_UNIXTIME(page_date, '%Y-%m')) AS monthYear FROM $db_pages WHERE page_state = 0 $filter_year $count_system $no_access ORDER BY page_date DESC";
 $res = $db->query($res);
 $jj = 0;
 
@@ -95,7 +100,7 @@ while ($row = $res->fetch()) {
     // 'MONTH_ROW_THISMONTH2' => $end,
   ]);
 
-  $res2 = "SELECT * FROM $db_pages WHERE FROM_UNIXTIME(page_date, '%Y-%m') = ? AND page_state = 0 $count_system ORDER BY page_date DESC";
+  $res2 = "SELECT * FROM $db_pages WHERE FROM_UNIXTIME(page_date, '%Y-%m') = ? AND page_state = 0 $count_system $no_access ORDER BY page_date DESC";
   $res2 = $db->query($res2, $monthYear['0'] . "-" . $monthYear['1']);
   $total2 = $res2->rowCount();
 

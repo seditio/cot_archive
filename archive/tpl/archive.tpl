@@ -21,7 +21,7 @@
 				{FILE "{PHP.cfg.themes_dir}/{PHP.theme}/warnings.tpl"}
 				<ul class="list-unstyled">
 					<!-- BEGIN: MONTH_ROW -->
-					<li class="py-2 px-3 mb-2 {MONTH_ROW_ODDEVEN}">
+					<li class="py-3 px-4 {MONTH_ROW_ODDEVEN}">
 						<h2><span class="text-capitalize">{MONTH_ROW_MONTH} {MONTH_ROW_YEAR}</span> {PHP.L.archive_year} ({MONTH_ROW_COUNT_PAGES})</h2>
 						<ul class="list-unstyled">
 							<!-- BEGIN: POST_ROW -->
@@ -36,9 +36,11 @@
 			</div>
 			<div class="col-lg-3">
 				<ul class="nav nav-pills flex-column mb-3">
+					<!-- IF {PHP.cfg.plugin.archive.home_style} == 0 -->
 					<li class="nav-item">
 						<a class="nav-link text-center<!-- IF !{PHP.year} --> active<!-- ENDIF -->" aria-current="page" href="{PHP|cot_url('archive')}">{PHP.L.archive_all}</a>
 					</li>
+					<!-- ENDIF -->
 					<!-- BEGIN: YEAR_ROW -->
 					<li class="nav-item">
 						<a class="nav-link text-center<!-- IF {PHP.year} == {YEAR_ROW_YEAR} --> active<!-- ENDIF -->" aria-current="page" href="{YEAR_ROW_YEAR_URL}">{YEAR_ROW_YEAR}</a>

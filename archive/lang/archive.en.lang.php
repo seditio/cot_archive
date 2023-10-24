@@ -14,8 +14,8 @@ defined('COT_CODE') or die('Wrong URL');
  */
 
 $L['info_name'] = '[SEDBY] Archive';
-$L['info_desc'] = 'Publications archive split by months';
-$L['info_notes'] = 'The plugin builds a page with publications archive automatially split by years and months';
+$L['info_desc'] = 'Publications archive grouped by months & years';
+$L['info_notes'] = 'The plugin builds a page with publications archive automatially grouped by years and months';
 
 /**
  * Plugin Config
@@ -37,7 +37,7 @@ $L['archive_metaTitle'] = 'Archive Meta Title';
 $L['archive_metaDesc'] = 'Archive Meta Description';
 
 $L['archive_title'] = 'Archive';
-$L['archive_desc'] = 'Pur publications split into years and months';
+$L['archive_desc'] = 'Pur publications grouped by years and months';
 $L['archive_all'] = 'All archives';
 
 $L['archive_for'] = 'for';
