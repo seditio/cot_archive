@@ -15,6 +15,8 @@ Hooks=standalone
 
 defined('COT_CODE') or die('Wrong URL');
 
+include_once cot_incfile('archive', 'plug', 'resources');
+
 include_once cot_incfile('page', 'module');
 include_once cot_incfile('cotlib', 'plug');
 
@@ -47,11 +49,16 @@ if (empty($year)) {
   $out['desc'] .= " " . $L['archive_for'] . " " . $year . " " . $L['archive_year_full'];
 }
 
+$total_posts = Cot::$db->query("SELECT COUNT(*) FROM $db_pages WHERE page_state = 0 $count_system $no_access")->fetchColumn();
+$starting = Cot::$db->query("SELECT page_date FROM $db_pages WHERE page_state = 0 $count_system $no_access ORDER BY page_date ASC LIMIT 1")->fetchColumn();
+
 $t = new XTemplate(cot_tplfile('archive', 'plug'));
 $t->assign([
   'ARCHIVE_TITLE' => $title,
   'ARCHIVE_DESC' => $L['archive_desc'],
   'ARCHIVE_BREADCRUMBS' => cot_breadcrumbs($crumbs, Cot::$cfg['homebreadcrumb']),
+  'ARCHIVE_TOTALPOSTS' => $total_posts,
+  'ARCHIVE_START' => cot_date('j F', $starting),
 ]);
 
 // Compile Years Block
