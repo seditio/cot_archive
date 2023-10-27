@@ -1,2 +1,2 @@
 # cot_archive
-Publications archive split by years and months
+Publications archive grouped by years and months
