@@ -18,7 +18,7 @@ Requires_modules=
 Requires_plugins=hits,cotlib
 [END_COT_EXT]
 [BEGIN_COT_EXT_CONFIG]
-count_system=01:radio::0:Count system pages
+blacklist=01:string::system:Categories blacklist
 home_style=02:radio::0:Only current year at archive homepage
 [END_COT_EXT_CONFIG]
 ==================== */
