@@ -30,7 +30,9 @@ $year = cot_import('year', 'G', 'INT');
 
 cot_stat_inc('totalarchive', 1, true);
 
-Cot::$cfg['plugin']['archive']['blacklist'] && $blacklist = 'AND page_cat NOT IN ("' . implode('","', explode(',', str_replace(' ', '', Cot::$cfg['plugin']['archive']['blacklist']))) . '")';
+$catmode = '';
+Cot::$cfg['plugin']['archive']['catmode'] && $catmode = 'NOT';
+$filterlist = 'AND page_cat ' . $catmode . ' IN ("' . implode('","', explode(',', str_replace(' ', '', Cot::$cfg['plugin']['archive']['catlist']))) . '")';
 
 $filter_year = '';
 !empty($year) && $filter_year = "AND FROM_UNIXTIME(page_date, '%Y') = $year";
@@ -49,22 +51,21 @@ if (empty($year)) {
   $out['desc'] .= " " . $L['archive_for'] . " " . $year . " " . $L['archive_year_full'];
 }
 
-$total_posts = Cot::$db->query("SELECT COUNT(*) FROM $db_pages WHERE page_state = 0 $blacklist $no_access")->fetchColumn();
-$starting = Cot::$db->query("SELECT page_date FROM $db_pages WHERE page_state = 0 $blacklist $no_access ORDER BY page_date ASC LIMIT 1")->fetchColumn();
+$total_posts = Cot::$db->query("SELECT COUNT(*) FROM $db_pages WHERE page_state = 0 $filterlist $no_access")->fetchColumn();
+$starting = Cot::$db->query("SELECT page_date FROM $db_pages WHERE page_state = 0 $filterlist $no_access ORDER BY page_date ASC LIMIT 1")->fetchColumn();
 
 $t = new XTemplate(cot_tplfile('archive', 'plug'));
 $t->assign([
-  'ARCHIVE_TITLE' => $title,
-  'ARCHIVE_DESC' => $L['archive_desc'],
+  'ARCHIVE_TITLE'       => $title,
+  'ARCHIVE_DESC'        => $L['archive_desc'],
   'ARCHIVE_BREADCRUMBS' => cot_breadcrumbs($crumbs, Cot::$cfg['homebreadcrumb']),
-  'ARCHIVE_TOTALPOSTS' => $total_posts,
-  'ARCHIVE_START' => cot_date('j F Y', $starting),
-  'ARCHIVE_COUNT' => cot_stat_get('totalarchive'),
+  'ARCHIVE_TOTALPOSTS'  => $total_posts,
+  'ARCHIVE_START'       => cot_date('j F Y', $starting),
+  'ARCHIVE_COUNT'       => cot_stat_get('totalarchive'),
 ]);
 
 // Compile Years Block
-
-$query = "SELECT DISTINCT(FROM_UNIXTIME(page_date, '%Y')) AS year FROM $db_pages WHERE page_state = 0 $blacklist $no_access ORDER BY page_date DESC";
+$query = "SELECT DISTINCT(FROM_UNIXTIME(page_date, '%Y')) AS year FROM $db_pages WHERE page_state = 0 $filterlist $no_access ORDER BY page_date DESC";
 
 $years_array = $db->query($query)->fetchAll(PDO::FETCH_COLUMN);
 if (!empty($year) && !in_array($year, $years_array)) {
@@ -89,8 +90,7 @@ while ($row = $res->fetch()) {
 $t->assign('ARCHIVE_YEAR', $year);
 
 // Compile Months Block
-
-$res = "SELECT DISTINCT(FROM_UNIXTIME(page_date, '%Y-%m')) AS monthYear FROM $db_pages WHERE page_state = 0 $filter_year $blacklist $no_access ORDER BY page_date DESC";
+$res = "SELECT DISTINCT(FROM_UNIXTIME(page_date, '%Y-%m')) AS monthYear FROM $db_pages WHERE page_state = 0 $filter_year $filterlist $no_access ORDER BY page_date DESC";
 $res = $db->query($res);
 $jj = 0;
 
@@ -108,12 +108,12 @@ while ($row = $res->fetch()) {
     // 'MONTH_ROW_THISMONTH2' => $end,
   ]);
 
-  $res2 = "SELECT * FROM $db_pages WHERE FROM_UNIXTIME(page_date, '%Y-%m') = ? AND page_state = 0 $blacklist $no_access ORDER BY page_date DESC";
+  $res2 = "SELECT * FROM $db_pages WHERE FROM_UNIXTIME(page_date, '%Y-%m') = ? AND page_state = 0 $filterlist $no_access ORDER BY page_date DESC";
   $res2 = $db->query($res2, $monthYear['0'] . "-" . $monthYear['1']);
   $total2 = $res2->rowCount();
 
   $t->assign([
-    'MONTH_ROW_COUNT' => $total2,
+    'MONTH_ROW_COUNT'       => $total2,
     'MONTH_ROW_COUNT_PAGES' => cot_declension($total2, 'archive_pages'),
   ]);
 
@@ -122,8 +122,8 @@ while ($row = $res->fetch()) {
     $kk++;
     $t->assign(cot_generate_pagetags($row2, 'POST_ROW_'));
     $t->assign([
-      'POST_ROW_NUM'        => $total2,
-      'POST_ROW_ODDEVEN'    => cot_build_oddeven($kk),
+      'POST_ROW_NUM'     => $total2,
+      'POST_ROW_ODDEVEN' => cot_build_oddeven($kk),
     ]);
     $total2--;
     $t->parse("MAIN.MONTH_ROW.POST_ROW");

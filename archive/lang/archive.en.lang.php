@@ -21,8 +21,12 @@ $L['info_notes'] = 'The plugin builds a page with publications archive automatia
  * Plugin Config
  */
 
-$L['cfg_blacklist'] = 'Categories blacklist';
-$L['cfg_blacklist_hint'] = 'Comma-separated';
+$L['cfg_filter'] = 'Filter categories';
+$L['cfg_catmode'] = 'Blacklist mode';
+$L['cfg_catmode_hint'] = 'Otherwise white list';
+$L['cfg_catlist'] = 'Cat codes';
+$L['cfg_catlist_hint'] = 'Comma-separated';
+$L['cfg_misc'] = 'Misc';
 $L['cfg_home_style'] = 'Show only current year pages in the default location';
 $L['cfg_home_style_hint'] = 'Otherwise show whole archive';
 
